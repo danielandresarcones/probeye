@@ -526,6 +526,38 @@ class AdditiveCorrelatedModelErrorS23D(CorrelatedModelErrorS23D):
         # evaluate log-likelihood (no efficient algorithm available in this case)
         return _loglike_multivariate_normal(residual_vector, cov_matrix)
 
+class AdditiveCorrelatedModelErrorS23DPrescribed(ScipyLikelihoodBase):
+    """
+    This is a likelihood model class based on a multivariate normal distribution that
+    includes correlation effects in two or three spatial variables. Both the model error
+    as well as the measurement error (if considered) are assumed to be additive. The
+    covariance matrix is prescribed
+
+    Parameters
+    ----------
+    correlated_model_error
+        The CorrelatedModelError instance to derive from.
+    """
+
+    def __init__(self, correlated_model_error: ScipyLikelihoodBase):
+        super().__init__(correlated_model_error)
+
+    def loglike(
+        self,
+        response_vector: np.ndarray,
+        residual_vector: np.ndarray,
+        prms: dict,
+    ) -> float:
+        """
+        Computes the log-likelihood of this model. For more information, check out the
+        doc-string of the parent class (SolverLikelihoodBase).
+        """
+
+        # get the prescribed covariance matrix
+        cov_matrix = prms["cov"]
+
+        # evaluate log-likelihood (no efficient algorithm available in this case)
+        return _loglike_multivariate_normal(residual_vector, cov_matrix)
 
 class AdditiveCorrelatedModelError1D1D(CorrelatedModelError1D1D):
     """
@@ -974,6 +1006,9 @@ def translate_likelihood_model(lm_def: GaussianLikelihoodModel) -> ScipyLikeliho
             else:
                 l_class = f"{prefix}_Correlated_1D1D"
 
+    if lm_def.prescribes_cov:
+        l_class = f"{prefix}_Correlated_S23D_Pres"
+
     # this dict allows to map an assigned string from the if-cases above to a specific
     # likelihood model defined in this file; the class is not assigned directly to the
     # variable l_class from the if-clauses above to avoid that l_class can have multiple
@@ -982,6 +1017,7 @@ def translate_likelihood_model(lm_def: GaussianLikelihoodModel) -> ScipyLikeliho
         "Add_Uncorrelated": AdditiveUncorrelatedModelError,
         "Add_Correlated_1D": AdditiveCorrelatedModelError1D,
         "Add_Correlated_S23D": AdditiveCorrelatedModelErrorS23D,
+        "Add_Correlated_S23D_Pres":AdditiveCorrelatedModelErrorS23DPrescribed,
         "Add_Correlated_1D1D": AdditiveCorrelatedModelError1D1D,
         "Add_Correlated_1DS23D": AdditiveCorrelatedModelError1DS23D,
         "Mul_Uncorrelated": MultiplicativeUncorrelatedModelError,

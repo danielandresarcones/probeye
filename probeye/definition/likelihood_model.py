@@ -80,6 +80,10 @@ class GaussianLikelihoodModel:
                     if len(corr_var) > 1:
                         self.has_S23D_correlation_variable = True
 
+        # check if the covariance matrix is prescribed
+        if correlation is not None:
+            self.prescribes_cov = 'cov' in correlation.corr_dict
+
         # this attribute will be set when calling self._determine_output_lengths, which
         # is possible as soon as the forward model was assigned to the likelihood model
         self.output_lengths = {}  # type: dict

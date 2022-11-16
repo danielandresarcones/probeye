@@ -1,3 +1,4 @@
+import numpy as np
 class CorrelationModel:
     """
     Base class for the different (specific) correlation models.
@@ -97,3 +98,12 @@ class ExpModel(CorrelationModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.model_type = "exponential"
+
+class PrescribedCovModel(CorrelationModel):
+    """
+    Descriptive class for a prescribed covariance correlation model.
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.model_type = "prescribed_cov"

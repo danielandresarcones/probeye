@@ -1,6 +1,6 @@
 # standard library imports
 import types
-from copy import copy, deepcopy
+from copy import copy
 from typing import Union, List, Tuple, Any, Optional, Generator, Callable
 from typing import TYPE_CHECKING
 import os
@@ -1292,7 +1292,7 @@ def synchronize_objects(
         if attr_is_valid:
             if hasattr(new_obj, attribute):
                 try:
-                    setattr(new_obj, attribute, deepcopy(getattr(ref_obj, attribute)))
+                    setattr(new_obj, attribute, copy(getattr(ref_obj, attribute)))
                 except AttributeError:  # pragma: no cover
                     raise AttributeError(
                         f"can't set attribute '{attribute}'"
