@@ -81,6 +81,7 @@ class GaussianLikelihoodModel:
                         self.has_S23D_correlation_variable = True
 
         # check if the covariance matrix is prescribed
+        self.prescribes_cov = False
         if correlation is not None:
             self.prescribes_cov = 'cov' in correlation.corr_dict
 

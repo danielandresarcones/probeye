@@ -557,7 +557,9 @@ class AdditiveCorrelatedModelErrorS23DPrescribed(ScipyLikelihoodBase):
         cov_matrix = prms["cov"]
 
         # evaluate log-likelihood (no efficient algorithm available in this case)
-        return _loglike_multivariate_normal(residual_vector, cov_matrix)
+        ll = _loglike_multivariate_normal(residual_vector, cov_matrix)
+        print(ll)
+        return ll
 
 class AdditiveCorrelatedModelError1D1D(CorrelatedModelError1D1D):
     """
