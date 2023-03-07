@@ -20,6 +20,11 @@ Notes:
 
 # third party imports
 import numpy as np
+import os, sys, inspect
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 
 # local imports (problem definition)
 from probeye.definition.inverse_problem import InverseProblem
@@ -216,9 +221,9 @@ harlow_sampler = HarlowSampler(problem, forward_model, LatinHypercube, surrogate
 
 # Sampler and fit
 harlow_sampler.sample(
-    n_initial_point=n_init,
-    n_new_point_per_iteration=n_point_per_iter,
-    n_iter=n_iter,
+    n_initial_points=n_init,
+    n_new_points_per_iteration=n_point_per_iter,
+    max_n_iterations=n_iter,
     stopping_criterium=stopping_criterium,
 )
 harlow_sampler.fit()
